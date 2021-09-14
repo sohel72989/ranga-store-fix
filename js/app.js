@@ -212,10 +212,10 @@ const loadProducts = () => {
 };
 
 // show all product in UI
+
 const showProducts = (products) => {
   const allProducts = products.map((pd) => pd);
   for (const product of allProducts) {
-    // fix image
     const image = product.image;
     const div = document.createElement("div");
     div.classList.add("product");
@@ -227,49 +227,47 @@ const showProducts = (products) => {
 		<p>Category: ${product.category}</p>
 		<h2>Price: $ ${product.price}</h2>
 		<p> <i class="fas fa-star text-danger"> ${product.rating.rate} </i>  <i class="fas fa-user"> ${product.rating.count} </i> </p>
-		<button onclick="addToCart(${product.id},${product.price})" id="addToCart-btn" class="buy-now btn btn-dark text-white">Add to Cart</button>
+		<button onclick="addToCart(${product.id},${product.price})" id="addToCart-btn" class="buy-now btn btn-success text-white">Add to Cart</button>
 		<button id="details-btn" onclick="getSingleProduct(${product.id})" class="btn btn-danger text-white">Details</button>
 	 </div>
       `;
     document.getElementById("all-products").appendChild(div);
   }
 };
-// cart count function
+// cart count function & total measurement
 let count = 0;
 const addToCart = (id, price) => {
   count = count + 1;
-  // call update price function
   updatePrice("price", price);
-  // call update tax function
   updateTaxAndCharge();
   document.getElementById("total-Products").innerText = count;
-  // call updateTotal function.
   updateTotal();
 };
 
 const getInputValue = (id) => {
   const element = document.getElementById(id).innerText;
-  // total price parseInt to ParseFloat change fixed isses.
+
+  // totalPrice parseInt to ParseFloat change.
   const converted = parseFloat(element);
   return converted;
 };
 
-// main price update function
+// mainPrice Update function
 const updatePrice = (id, value) => {
-  // console.log(value)
   const convertedOldPrice = getInputValue(id);
   const convertPrice = parseFloat(value);
-  // fix showing  exact floating price.
+
+  // Fix Showing  exactFloating price.
   const total = parseFloat(convertedOldPrice) + convertPrice;
   document.getElementById(id).innerText = total.toFixed(2);
 };
 
-// set innerText function
+// Set innerText function
 const setInnerText = (id, value) => {
   document.getElementById(id).innerText = Math.round(value);
 };
 
-// update delivery charge and total Tax
+// updateDelivery charge and totalTax
 const updateTaxAndCharge = () => {
   const priceConverted = getInputValue("price");
   if (priceConverted > 200) {
@@ -286,23 +284,26 @@ const updateTaxAndCharge = () => {
   }
 };
 
-//grandTotal update function
+//grandTotal update
 const updateTotal = () => {
   const grandTotal =
     getInputValue("price") +
     getInputValue("delivery-charge") +
     getInputValue("total-tax");
+
   // fix 2 decimal value showing now.
   document.getElementById("total").innerText = grandTotal.toFixed(2);
 };
-// single product function
+
+
+// singleProduct function
 const getSingleProduct = (id) => {
 
   fetch(`https://fakestoreapi.com/products/${id}`)
     .then(res => res.json())
     .then(json => ShowSingleProduct(json))
 }
-//    display product function
+//    displayProduct function
 const ShowSingleProduct = product => {
   const details = document.getElementById("details-show");
 
@@ -317,13 +318,9 @@ const ShowSingleProduct = product => {
 	<small>Category : ${product.category}</small>
 	<p> <i class="fas fa-star text-danger"> ${product.rating.rate} </i>  <i class="fas fa-user"> ${product.rating.count} </i> </p>
 	<h4>Price : $ ${product.price}</h4>
-	 <button onclick="addToCart(${product.id},${product.price})" id="addToCart-btn" class="buy-now btn btn-dark text-white">Add to Cart</button>
+	 <button onclick="addToCart(${product.id},${product.price})" id="addToCart-btn" class="buy-now btn btn-success text-white">Add to Cart</button>
 	</div>
    </div>
 	`;
-
-
-  // details.classList.add('block')
-
 }
 loadProducts();
